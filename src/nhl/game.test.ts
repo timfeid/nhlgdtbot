@@ -6,7 +6,7 @@ chai.use(chaiSubset);
 
 
 describe('Game', function () {
-  this.timeout(5000)
+  this.timeout(10000)
   let gameWithShootout: Game
   let gameWithoutShootout: Game
 
@@ -35,20 +35,73 @@ describe('Game', function () {
     })
   })
 
-  it('gets linescore', () => {
-    expect(gameWithShootout.linescore()).to.containSubset([
-      { home: 1, away: 0, period: '1st' },
-      { home: 1, away: 2, period: '2nd' },
-      { home: 2, away: 2, period: '3rd' },
-      { home: 0, away: 0, period: 'OT' },
-      { home: 1, away: 0, period: 'SO' },
-    ])
+  it('gets boxscore', () => {
+    expect(gameWithShootout.boxscore()).to.containSubset({
+      teams: {
+        away: {
+          teamStats: {
+            teamSkaterStats: {
+              goals: 4,
+            },
+          },
+        },
+        home: {
+          teamStats: {
+            teamSkaterStats: {
+              goals: 4,
+            },
+          }
+        }
+      }
+    })
 
-    expect(gameWithoutShootout.linescore()).to.containSubset([
-      { home: 1, away: 1, period: '1st' },
-      { home: 2, away: 0, period: '2nd' },
-      { home: 2, away: 1, period: '3rd' },
-    ])
+    expect(gameWithoutShootout.boxscore()).to.containSubset({
+      teams: {
+        away: {
+          teamStats: {
+            teamSkaterStats: {
+              goals: 2,
+            },
+          },
+        },
+        home: {
+          teamStats: {
+            teamSkaterStats: {
+              goals: 5,
+            },
+          }
+        }
+      }
+    })
+  })
+
+  it('gets linescore', () => {
+    expect(gameWithShootout.linescore()).to.containSubset({
+      periods: [
+        { home: {goals: 1 }, away: { goals: 0 }, ordinalNum: '1st' },
+        { home: {goals: 1 }, away: { goals: 2 }, ordinalNum: '2nd' },
+        { home: {goals: 2 }, away: { goals: 2 }, ordinalNum: '3rd' },
+        { home: {goals: 0 }, away: { goals: 0 }, ordinalNum: 'OT' },
+      ],
+      shootoutInfo: {
+        away: {
+          scores: 0,
+          attempts: 5
+        },
+        home: {
+          scores: 1,
+          attempts: 5
+        },
+      }
+    })
+
+    expect(gameWithoutShootout.linescore()).to.containSubset({
+      periods: [
+        { home: {goals: 1 }, away: { goals: 1 }, ordinalNum: '1st' },
+        { home: {goals: 2 }, away: { goals: 0 }, ordinalNum: '2nd' },
+        { home: {goals: 2 }, away: { goals: 1 }, ordinalNum: '3rd' },
+      ]
+    })
   })
 
   it ('checks if shootout exists correctly', () => {

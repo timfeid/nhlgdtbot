@@ -1,21 +1,21 @@
 import Reddit from 'snoowrap';
 import config from './config';
-import { Pbp } from './nhl/pbp';
+import { Game } from './nhl/game';
+import { GameToText } from './reddit/game-to-text';
 
 console.log(config.reddit)
 const reddit = new Reddit(config.reddit)
 
-// Replace 2017020642 with a specific game
-let playByPlay = new Pbp(2017020642)
+const wat = async () => {
+  const gameWithShootout = new GameToText(await Game.get(2017020642))
 
-playByPlay.on('period_ready', play => {
-  console.log(play)
-})
+  reddit.submitSelfpost({
+    subredditName: 'NHLGDTBot',
+    title: 'hello world',
+    text: `# LINESCORE\n${gameWithShootout.linescore()}
+# BOXSCORE\n${gameWithShootout.boxscore()}
+# PLAYERS\n${gameWithShootout.players()}`
+  })
+}
 
-playByPlay.on('goal', play => {
-  console.log(play.result)
-})
-
-// playByPlay.on(...)
-
-playByPlay.start()
+wat()

@@ -105,19 +105,11 @@ export class Game {
   }
 
   public linescore() {
-    const homeId = this.teams().home.id
-    const periods = [...Array(this.response.liveData.plays.playsByPeriod.length)].map(() => {return {home: 0, away: 0, period: null}})
+    return this.response.liveData.linescore
+  }
 
-    for (const i in periods) {
-      periods[i].period = this.response.liveData.plays.allPlays[this.response.liveData.plays.playsByPeriod[i].plays[0]].about.ordinalNum
-    }
-
-    this.scoringPlays().forEach((play: any) => {
-      const team = play.team.id === homeId ? 'home' : 'away'
-      periods[play.about.period - 1][team]++
-    })
-
-    return periods
+  public boxscore() {
+    return this.response.liveData.boxscore
   }
 
 }
