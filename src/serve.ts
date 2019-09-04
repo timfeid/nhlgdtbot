@@ -12,9 +12,10 @@ const wat = async () => {
   reddit.submitSelfpost({
     subredditName: 'NHLGDTBot',
     title: 'hello world',
-    text: `# LINESCORE\n${gameWithShootout.linescore()}
-# BOXSCORE\n${gameWithShootout.boxscore()}
-# PLAYERS\n${gameWithShootout.players()}`
+    text: `# LINESCORE + BOXSCORE\n${gameWithShootout.linescore()}
+${gameWithShootout.shootout()}
+# PLAYERS\n${gameWithShootout.players()}
+# GOALIES\n${gameWithShootout.goalies()}`
   })
 }
 

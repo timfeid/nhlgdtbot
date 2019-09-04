@@ -100,7 +100,7 @@ export class Game {
     return players
   }
 
-  protected shootoutPlayer (players: any[]) {
+  public shootoutPlayer (players: any[]) {
     return players.filter((player: any) => ['Shooter', 'Scorer'].indexOf(player.playerType) !== -1)[0].player
   }
 
